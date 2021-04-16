@@ -30,7 +30,7 @@ class HousePage extends Component {
 				getData={this.gotService.getAllHouses}
 				renderItem={({ name, region }) => (
 					<>
-						<span className='font-weight-bold'>{name}</span> <span>({region} pages)</span>
+						<span className='font-weight-bold'>{name}</span> <span>({region} region)</span>
 					</>
 				)}
 			/>
