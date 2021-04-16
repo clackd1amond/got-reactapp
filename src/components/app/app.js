@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Col, Row, Container } from 'reactstrap';
+import './app.css';
 import Header from '../header';
 import RandomChar from '../randomChar';
 import ErrorMessage from '../errorMessage';
