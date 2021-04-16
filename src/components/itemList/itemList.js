@@ -4,11 +4,12 @@ import Spinner from '../spinner';
 import gotService from '../../services/gotService';
 export default class ItemList extends Component {
 	gotService = new gotService();
-	state = { charList: null };
+	state = { itemList: null };
 
 	componentDidMount() {
-		this.gotService.getAllCharacters().then((charList) => {
-			this.setState({ charList });
+		const { getData } = this.props;
+		getData().then((itemList) => {
+			this.setState({ itemList });
 		});
 	}
 
@@ -23,12 +24,13 @@ export default class ItemList extends Component {
 	}
 
 	render() {
-		const { charList } = this.state;
+		const { itemList } = this.state;
 
-		if (!charList) {
+		if (!itemList) {
 			return <Spinner />;
 		}
-		const items = this.renderItems(charList);
+
+		const items = this.renderItems(itemList);
 
 		return <ul className='item-list list-group'>{items}</ul>;
 	}
