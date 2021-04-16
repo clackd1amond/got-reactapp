@@ -2,9 +2,19 @@ import React, { Component } from 'react';
 import './itemList.css';
 import Spinner from '../spinner';
 import gotService from '../../services/gotService';
+import PropTypes from 'prop-types';
+
 export default class ItemList extends Component {
 	gotService = new gotService();
 	state = { itemList: null };
+
+	static defaultProps = {
+		onItemSelected: () => {},
+	};
+
+	static propTypes = {
+		onItemSelected: PropTypes.func,
+	};
 
 	componentDidMount() {
 		const { getData } = this.props;

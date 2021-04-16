@@ -22,7 +22,7 @@ export default class App extends Component {
 	};
 
 	render() {
-		const randomBlockRender = this.state.showRandomCharBlock ? <RandomChar /> : null;
+		const randomBlockRender = this.state.showRandomCharBlock ? <RandomChar interval={15000} /> : null;
 
 		if (this.state.error) return <ErrorMessage />;
 
