@@ -5,7 +5,7 @@ import ItemDetails, { Field } from '../itemDetails';
 import gotService from '../../services/gotService';
 import RowBlock from '../rowBlock';
 
-class CharacterPage extends Component {
+export default class CharacterPage extends Component {
 	gotService = new gotService();
 
 	state = {
@@ -48,4 +48,3 @@ class CharacterPage extends Component {
 		return <RowBlock left={itemList} right={charDetails} />;
 	}
 }
-export { CharacterPage };
