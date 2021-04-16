@@ -38,8 +38,14 @@ export default class GotService {
 		return this.getResource(`/houses/${id}`);
 	}
 
-	_transformCharacter(char) {
+	_extractId = (item) => {
+		const idRegExp = /\/([0-9]*)$/;
+		return item.url.match(idRegExp)[1];
+	};
+
+	_transformCharacter = (char) => {
 		return {
+			id: this._extractId(char),
 			name: char.name !== '' ? char.name : '---',
 			gender: char.gender !== '' ? char.gender : '---',
 			born: char.born !== '' ? char.born : '---',
@@ -48,10 +54,11 @@ export default class GotService {
 			titles: char.titles[0] !== '' ? char.titles.join('; ') : '---',
 			aliases: char.aliases[0] !== '' ? char.aliases.join('; ') : '---',
 		};
-	}
+	};
 
-	_transformHouse(house) {
+	_transformHouse = (house) => {
 		return {
+			id: this._extractId(house),
 			name: house.name !== '' ? house.name : '---',
 			region: house.region !== '' ? house.region : '---',
 			words: house.words !== '' ? house.words : '---',
@@ -59,14 +66,15 @@ export default class GotService {
 			overlord: house.overlord !== '' ? house.overlord : '---',
 			ancestralWeapons: house.ancestralWeapons[0] !== '' ? house.ancestralWeapons.join('; ') : '---',
 		};
-	}
+	};
 
-	_transformBook(book) {
+	_transformBook = (book) => {
 		return {
+			id: this._extractId(book),
 			name: book.name,
 			numberOfPages: book.numberOfPages,
 			publisher: book.publisher,
 			released: book.released,
 		};
-	}
+	};
 }
