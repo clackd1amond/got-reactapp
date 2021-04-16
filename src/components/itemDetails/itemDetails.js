@@ -2,6 +2,15 @@ import React, { Component } from 'react';
 import './itemDetails.css';
 import gotService from '../../services/gotService';
 
+const Field = ({ item, field, label }) => {
+	return (
+		<li className='list-group-item d-flex justify-content-between'>
+			<span className='term'>{label}</span>
+			<span>{item[field]}</span>
+		</li>
+	);
+};
+export { Field };
 export default class ItemDetails extends Component {
 	gotService = new gotService();
 
@@ -29,8 +38,20 @@ export default class ItemDetails extends Component {
 	}
 
 	render() {
-		if (!this.state.item) {
+		const { item } = this.state;
+		if (!item) {
 			return <span className='select-error'>Please select an item from the list!</span>;
 		}
+		const { name } = item;
+		return (
+			<div className='item-details rounded'>
+				<h4>{name}</h4>
+				<ul className='list-group list-group-flush'>
+					{React.Children.map(this.props.children, (child) => {
+						return React.cloneElement(child, { item });
+					})}
+				</ul>
+			</div>
+		);
 	}
 }

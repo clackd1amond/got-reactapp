@@ -1,1 +1,3 @@
-export { default } from './itemDetails';
+import ItemDetails, { Field } from './itemDetails';
+export default ItemDetails;
+export { Field };
