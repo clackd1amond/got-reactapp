@@ -42,7 +42,7 @@ export default class App extends Component {
 										<Row>
 											<Col lg={{ size: 5, offset: 0 }}>
 												<button className='btn btn-primary mb-4' onClick={this.toggleRandomCharBlock}>
-													Hide/show random block
+													Hide/show random char block
 												</button>
 												{randomBlockRender}
 											</Col>
