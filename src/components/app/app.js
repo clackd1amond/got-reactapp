@@ -3,15 +3,9 @@ import { Col, Row, Container } from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
 import ErrorMessage from '../errorMessage';
-import CharacterPage from '../characterPage';
-
-import ItemList from '../itemList';
-import CharDetails from '../charDetails';
-import gotService from '../../services/gotService';
+import { CharacterPage, BookPage, HousePage } from '../pages';
 
 export default class App extends Component {
-	gotService = new gotService();
-
 	state = {
 		showRandomCharBlock: true,
 		error: false,
@@ -47,35 +41,9 @@ export default class App extends Component {
 
 					<CharacterPage />
 
-					<Row>
-						<Col md='6'>
-							<ItemList
-								onItemSelected={this.onItemSelected}
-								getData={this.gotService.getAllBooks}
-								renderItem={({ name, numberOfPages }) => (
-									<>
-										<span className='font-weight-bold'>{name}</span> <span>({numberOfPages} pages)</span>
-									</>
-								)}
-							/>
-						</Col>
-						<Col md='6'>
-							<CharDetails charId={this.state.selectedChar} getData={this.gotService.getBook} />
-						</Col>
-					</Row>
+					<BookPage />
 
-					<Row>
-						<Col md='6'>
-							<ItemList
-								onItemSelected={this.onItemSelected}
-								getData={this.gotService.getAllHouses}
-								renderItem={({ name, region }) => `${name} (${region})`}
-							/>
-						</Col>
-						<Col md='6'>
-							<CharDetails charId={this.state.selectedChar} getData={this.gotService.getHouse} />
-						</Col>
-					</Row>
+					<HousePage />
 				</Container>
 			</>
 		);
