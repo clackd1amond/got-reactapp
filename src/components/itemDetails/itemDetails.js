@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import './itemDetails.css';
-import gotService from '../../services/gotService';
 
 const Field = ({ item, field, label }) => {
 	return (
@@ -11,47 +10,31 @@ const Field = ({ item, field, label }) => {
 	);
 };
 export { Field };
-export default class ItemDetails extends Component {
-	gotService = new gotService();
 
-	state = {
-		item: null,
-	};
+function ItemDetails({ itemId, getData, children }) {
+	const [item, setItem] = useState(null);
 
-	componentDidMount() {
-		this.updateItem();
-	}
-
-	componentDidUpdate(prevProps) {
-		if (this.props.itemId !== prevProps.itemId) {
-			this.updateItem();
-		}
-	}
-
-	updateItem() {
-		const { itemId, getData } = this.props;
+	useEffect(() => {
 		if (!itemId) return;
-
-		getData(itemId).then((item) => {
-			this.setState({ item });
+		getData(itemId).then((data) => {
+			setItem(data);
 		});
-	}
+	}, [itemId]);
 
-	render() {
-		const { item } = this.state;
-		if (!item) {
-			return <span className='select-error'>Please select an item from the list!</span>;
-		}
-		const { name } = item;
-		return (
-			<div className='item-details rounded'>
-				<h4>{name}</h4>
-				<ul className='list-group list-group-flush'>
-					{React.Children.map(this.props.children, (child) => {
-						return React.cloneElement(child, { item });
-					})}
-				</ul>
-			</div>
-		);
+	if (!item) {
+		return <span className='select-error'>Please select an item from the list!</span>;
 	}
+	const { name } = item;
+	return (
+		<div className='item-details rounded'>
+			<h4>{name}</h4>
+			<ul className='list-group list-group-flush'>
+				{React.Children.map(children, (child) => {
+					return React.cloneElement(child, { item });
+				})}
+			</ul>
+		</div>
+	);
 }
+
+export default ItemDetails;
