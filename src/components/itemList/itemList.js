@@ -1,49 +1,34 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import './itemList.css';
 import Spinner from '../spinner';
-import gotService from '../../services/gotService';
-import PropTypes from 'prop-types';
 
-export default class ItemList extends Component {
-	gotService = new gotService();
-	state = { itemList: null };
-
-	static defaultProps = {
-		onItemSelected: () => {},
-	};
-
-	static propTypes = {
-		onItemSelected: PropTypes.func,
-	};
-
-	componentDidMount() {
-		const { getData } = this.props;
-		getData().then((itemList) => {
-			this.setState({ itemList });
+function ItemList({ getData, onItemSelected, renderItem }) {
+	const [itemList, updateList] = useState([]);
+	useEffect(() => {
+		getData().then((data) => {
+			updateList(data);
 		});
-	}
+	}, []);
 
-	renderItems(arr) {
+	function renderItems(arr) {
 		return arr.map((item) => {
 			const { id } = item;
-			const label = this.props.renderItem(item);
+			const label = renderItem(item);
 			return (
-				<li key={id} onClick={() => this.props.onItemSelected(id)} className='list-group-item'>
+				<li key={id} onClick={() => onItemSelected(id)} className='list-group-item'>
 					{label}
 				</li>
 			);
 		});
 	}
 
-	render() {
-		const { itemList } = this.state;
-
-		if (!itemList) {
-			return <Spinner />;
-		}
-
-		const items = this.renderItems(itemList);
-
-		return <ul className='item-list list-group'>{items}</ul>;
+	if (!itemList) {
+		return <Spinner />;
 	}
+
+	const items = renderItems(itemList);
+
+	return <ul className='item-list list-group'>{items}</ul>;
 }
+
+export default ItemList;

@@ -1,53 +1,41 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import './randomChar.css';
-import gotService from '../../services/gotService';
+import GotService from '../../services/gotService';
 import Spinner from '../spinner';
 import ErrorMessage from '../errorMessage';
-import PropTypes from 'prop-types';
-export default class RandomChar extends Component {
-	gotService = new gotService();
-	state = {
-		char: {},
-		loading: true,
-		error: false,
-	};
 
-	static defaultProps = {
-		interval: 5000,
-	};
+function RandomChar({ interval = 5000 }) {
+	const gotService = new GotService();
 
-	static propTypes = {
-		interval: PropTypes.number,
-	};
+	const [char, updateCharState] = useState({});
+	const [loading, onCharLoadedState] = useState(true);
+	const [error, onErrorState] = useState(false);
 
-	componentDidMount() {
-		this.updateChar();
-		this.timerId = setInterval(this.updateChar, this.props.interval);
-	}
+	useEffect(() => {
+		updateChar();
+		const timerId = setInterval(updateChar, interval);
+		return () => {
+			clearInterval(timerId);
+		};
+	}, []);
 
-	componentWillUnmount() {
-		clearInterval(this.timerId);
-	}
-
-	onCharLoaded = (char) => {
-		this.setState({ char, loading: false });
-	};
-
-	onError = (err) => {
-		this.setState({ error: true, loading: false });
-	};
-
-	updateChar = () => {
+	const updateChar = () => {
 		const id = Math.floor(Math.random() * 140 + 25);
-		this.gotService.getCharacter(id).then(this.onCharLoaded).catch(this.onError);
+		gotService
+			.getCharacter(id)
+			.then((data) => {
+				updateCharState(data);
+				onCharLoadedState(false);
+			})
+			.catch(() => {
+				onErrorState(true);
+				onCharLoadedState(false);
+			});
 	};
 
-	render() {
-		const { char, loading, error } = this.state;
-		const content = error ? <ErrorMessage /> : loading ? <Spinner /> : <View char={char} />;
+	const content = error ? <ErrorMessage /> : loading ? <Spinner /> : <View char={char} />;
 
-		return <div className='random-block rounded'>{content}</div>;
-	}
+	return <div className='random-block rounded'>{content}</div>;
 }
 
 const View = ({ char: { name, gender, born, died, culture } }) => {
@@ -75,3 +63,5 @@ const View = ({ char: { name, gender, born, died, culture } }) => {
 		</>
 	);
 };
+
+export default RandomChar;
